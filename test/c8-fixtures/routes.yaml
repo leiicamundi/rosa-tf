@@ -1,0 +1,79 @@
+# TODO; finish route config 
+
+zeebeGateway:
+  ingress:
+    grpc:
+      annotations:
+        route.openshift.io/termination: reencrypt
+        route.openshift.io/destination-ca-certificate-secret: <SERVICE_CERTIFICATE_SECRET_NAME>
+      className: openshift-default
+      tls:
+        enabled: true
+        secretName: <EXTERNAL_URL_CERTIFICATE_SECRET_NAME>
+  env:
+    - name: ZEEBE_GATEWAY_SECURITY_ENABLED
+      value: "true"
+    - name: ZEEBE_GATEWAY_SECURITY_CERTIFICATECHAINPATH
+      value: /usr/local/zeebe/config/tls.crt
+    - name: ZEEBE_GATEWAY_SECURITY_PRIVATEKEYPATH
+      value: /usr/local/zeebe/config/tls.key
+  extraVolumeMounts:
+    - name: certificate
+      mountPath: /usr/local/zeebe/config/tls.crt
+      subPath: tls.crt
+    - name: key
+      mountPath: /usr/local/zeebe/config/tls.key
+      subPath: tls.key
+  extraVolumes:
+    - name: certificate
+      secret:
+        secretName: <SERVICE_CERTIFICATE_SECRET_NAME>
+        items:
+          - key: tls.crt
+            path: tls.crt
+        defaultMode: 420
+    - name: key
+      secret:
+        secretName: <SERVICE_CERTIFICATE_SECRET_NAME>
+        items:
+          - key: tls.key
+            path: tls.key
+        defaultMode: 420
+
+operate:
+  env:
+    - name: CAMUNDA_OPERATE_ZEEBE_SECURE
+      value: "true"
+    - name: CAMUNDA_OPERATE_ZEEBE_CERTIFICATEPATH
+      value: /usr/local/operate/config/tls.crt
+  extraVolumeMounts:
+    - name: certificate
+      mountPath: /usr/local/operate/config/tls.crt
+      subPath: tls.crt
+  extraVolumes:
+    - name: certificate
+      secret:
+        secretName: <SERVICE_CERTIFICATE_SECRET_NAME>
+        items:
+          - key: tls.crt
+            path: tls.crt
+        defaultMode: 420
+
+tasklist:
+  env:
+    - name: CAMUNDA_TASKLIST_ZEEBE_SECURE
+      value: "true"
+    - name: CAMUNDA_TASKLIST_ZEEBE_CERTIFICATEPATH
+      value: /usr/local/tasklist/config/tls.crt
+  extraVolumeMounts:
+    - name: certificate
+      mountPath: /usr/local/tasklist/config/tls.crt
+      subPath: tls.crt
+  extraVolumes:
+    - name: certificate
+      secret:
+        secretName: <SERVICE_CERTIFICATE_SECRET_NAME>
+        items:
+          - key: tls.crt
+            path: tls.crt
+        defaultMode: 420

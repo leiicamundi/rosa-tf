@@ -9,7 +9,7 @@ ROSA with HCP using terraform
 * ROSA CLI
 * OpenShift CLI
 
-## Getting started
+## Getting started : Deploy ROSA HCP
 
 Base tutorial https://aws.amazon.com/blogs/containers/build-rosa-clusters-with-terraform/
 
@@ -84,6 +84,27 @@ kubectl config use "$CLUSTER_NAME"
 
 # create a new project
 oc new-project "$NAMESPACE"
+```
+
+
+## Install C8 on the deployed OpenShift
+
+_Please note that this guide assumes that you have a working helm cli installed with a version > 3.1_
+
+1. Install the helm chart with a specific version:
+```bash
+helm repo add camunda https://helm.camunda.io
+helm repo update
+helm pull camunda/camunda-platform --version 10.0.4 --untar --untardir ./tmp-helm
+```
+2. Please note that we use some values for:
+    - the version of C8 that we deploy: [./test/c8-fixtures/values-latest.yaml](https://helm.camunda.io/camunda-platform/values/values-latest.yaml)
+3. We need to [enforce some specific values for OpenShift](https://github.com/camunda/camunda-platform-helm/tree/main/charts/camunda-platform/openshift#prerequisite):
+```bash
+helm install camunda camunda/camunda-platform --skip-crds       \
+    --values ./tmp-helm/camunda-platform/openshift/values.yaml        \
+    --values ./test/c8-fixtures/values-latest.yaml         \
+    --post-renderer bash --post-renderer-args ./tmp-helm/camunda-platform/openshift/patch.sh
 ```
 
 ## Improvements / TODO

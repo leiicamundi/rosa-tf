@@ -5,3 +5,4 @@ rosa.plan
 .vscode
 *.tfstate
 *.tfstate.backup
+tmp-helm
