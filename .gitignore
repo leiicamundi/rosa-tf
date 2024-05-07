@@ -1,0 +1,7 @@
+.terraform
+.terraform.lock
+.terraform.lock.hcl
+rosa.plan
+.vscode
+*.tfstate
+*.tfstate.backup
