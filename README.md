@@ -89,6 +89,8 @@ oc new-project "$NAMESPACE"
 
 ## Install C8 on the deployed OpenShift
 
+TODO: align needed ressources to deploy C8 on OpenShift, minimal worker size is not sufficient for standard deployment
+
 _Please note that this guide assumes that you have a working helm cli installed with a version > 3.1_
 
 1. Install the helm chart with a specific version:
