@@ -2,7 +2,7 @@
 
 ROSA with HCP using terraform
 
-## Requirements 
+## Requirements
 
 * Terraform
 * AWS CLI
